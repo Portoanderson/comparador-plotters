@@ -22,7 +22,7 @@
     font-size:16px;line-height:1.4}
   .screen{display:none;min-height:100vh}
   .screen.on{display:block}
-
+ 
   /* ---------- HEADER ---------- */
   header{position:sticky;top:0;z-index:30;background:#0E1116f5;
     backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
@@ -34,7 +34,7 @@
     border-radius:12px;padding:8px 12px;font-size:11px;color:var(--dim)}
   .assump input{width:100%;background:transparent;border:none;color:var(--gold);
     font-size:18px;font-weight:800;outline:none;margin-top:2px}
-
+ 
   /* ---------- LISTA ---------- */
   .wrap{padding:16px}
   .addbtn{width:100%;background:var(--gold);color:#1a1407;border:none;
@@ -61,7 +61,7 @@
   .b-ref{background:var(--panel2);color:var(--ink);border:1px solid var(--line)}
   .b-rot{background:var(--panel2);color:var(--gold);border:1px solid var(--line)}
   .b-reset{background:#2a1518;color:#fca5a5;border:1px solid #4a2226}
-
+ 
   /* ---------- FICHA ---------- */
   .fichahead{position:sticky;top:0;z-index:30;background:#0E1116f5;backdrop-filter:blur(8px);
     border-bottom:1px solid var(--line);padding:calc(env(safe-area-inset-top) + 10px) 12px 10px;
@@ -74,7 +74,7 @@
   .fh-nav button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);
     border-radius:11px;width:44px;height:42px;font-size:20px;font-weight:700}
   .fh-nav button:disabled{opacity:.3}
-
+ 
   .ficha{padding:16px;padding-bottom:40px}
   /* nome grande da empresa */
   .bignamebox{background:var(--panel);border:2px solid var(--gold);border-radius:16px;
@@ -84,7 +84,7 @@
   .bignamebox input{width:100%;background:transparent;border:none;color:var(--ink);
     font-size:24px;font-weight:800;outline:none}
   .bignamebox input::placeholder{color:#4a5563}
-
+ 
   /* métricas ao vivo */
   .live{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:14px 0 20px}
   .livecard{background:var(--panel2);border:1px solid var(--line);border-radius:12px;
@@ -96,7 +96,7 @@
     padding:14px;text-align:center;margin-bottom:20px}
   .scorebanner .big{font-size:40px;font-weight:800;line-height:1}
   .scorebanner .lbl{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
-
+ 
   /* campos espaçados */
   .sec{font-size:12px;font-weight:800;color:var(--gold);text-transform:uppercase;
     letter-spacing:.8px;margin:22px 4px 10px}
@@ -118,7 +118,7 @@
   .delrow{margin-top:24px}
   .delrow button{width:100%;background:#2a1518;color:#fca5a5;border:1px solid #4a2226;
     border-radius:12px;padding:15px;font-size:14px;font-weight:600}
-
+ 
   /* dialog / roteiro reusa estilos simples */
   dialog{background:var(--panel);color:var(--ink);border:1px solid var(--line);
     border-radius:16px;padding:0;max-width:94vw;width:460px}
@@ -153,7 +153,7 @@
 </style>
 </head>
 <body>
-
+ 
 <!-- ============ TELA 1: LISTA ============ -->
 <div class="screen on" id="s-list">
   <header>
@@ -175,7 +175,7 @@
     </div>
   </div>
 </div>
-
+ 
 <!-- ============ TELA 2: FICHA ============ -->
 <div class="screen" id="s-ficha">
   <div class="fichahead">
@@ -188,7 +188,7 @@
   </div>
   <div class="ficha" id="ficha"></div>
 </div>
-
+ 
 <dialog id="refdlg">
   <div class="dlghead"><span>Benchmarks levantados</span><button class="xbtn" onclick="refdlg.close()">✕</button></div>
   <div class="dlgbody" id="refbody"></div>
@@ -197,7 +197,7 @@
   <div class="dlghead"><span>Roteiro da feira</span><button class="xbtn" onclick="rotdlg.close()">✕</button></div>
   <div class="dlgbody" id="rotbody"></div>
 </dialog>
-
+ 
 <script>
 /* ---------------- estado ---------------- */
 let data=load();
@@ -208,7 +208,7 @@ function load(){try{return JSON.parse(localStorage.getItem('plotters2')||'[]')}c
 function save(){localStorage.setItem('plotters2',JSON.stringify(data));
   localStorage.setItem('assump',JSON.stringify({m:margem.value,v:volume.value}))}
 margem.oninput=()=>{save();renderList()};volume.oninput=()=>{save();renderList()};
-
+ 
 /* ---------------- cálculo ---------------- */
 function num(x){const n=parseFloat(x);return isNaN(n)?0:n}
 function calc(d){
@@ -240,14 +240,14 @@ function computeScores(){
 }
 function scoreColor(s){if(s===null||s===undefined)return'var(--dim)';if(s>=70)return'var(--good)';if(s>=45)return'var(--mid)';return'var(--bad)'}
 function fmt(v,dec){return v===null||v===undefined?'—':Number(v).toLocaleString('pt-BR',{maximumFractionDigits:dec})}
-
+ 
 /* ---------------- navegação telas ---------------- */
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
   document.getElementById(id).classList.add('on');window.scrollTo(0,0)}
 function goList(){current=-1;renderList();show('s-list')}
 function openFicha(i){current=i;renderFicha();show('s-ficha')}
 function navMachine(dir){const ni=current+dir;if(ni>=0&&ni<data.length){current=ni;renderFicha()}}
-
+ 
 /* ---------------- lista ---------------- */
 function addMachine(){data.push({nome:'',iepson:'SIM',generica:'SIM'});save();openFicha(data.length-1)}
 function resetAll(){if(confirm('Apagar TODAS as máquinas coletadas?')){data=[];current=-1;save();renderList()}}
@@ -279,7 +279,7 @@ function renderList(){
     </div>`;
   }).join('');
 }
-
+ 
 /* ---------------- ficha ---------------- */
 function upd(k,v){data[current][k]=v;save();updateLive()}
 function seg(k){const d=data[current];
@@ -298,7 +298,7 @@ function renderFicha(){
       <div class="lbl">Empresa / Stand</div>
       <input value="${(d.nome||'').replace(/"/g,'&quot;')}" placeholder="Nome da empresa" oninput="upd('nome',this.value);document.getElementById('fh-title').textContent=this.value||'Nova máquina'">
     </div>
-
+ 
     <div class="scorebanner">
       <div class="big" id="live-score" style="color:${scoreColor(null)}">–</div>
       <div class="lbl">score (preencha para calcular)</div>
@@ -308,13 +308,13 @@ function renderFicha(){
       <div class="livecard"><div class="v" id="live-lu">—</div><div class="l">Lucro/mês</div></div>
       <div class="livecard"><div class="v" id="live-pb">—</div><div class="l">Payback</div></div>
     </div>
-
+ 
     <div class="sec">Identificação</div>
     <div class="field"><label>Marca</label>
       <input value="${(d.marca||'').replace(/"/g,'&quot;')}" placeholder="ex: AKAD, GCB, Microjet" oninput="upd('marca',this.value)"></div>
     <div class="field"><label>Modelo</label>
       <input value="${(d.modelo||'').replace(/"/g,'&quot;')}" placeholder="ex: NovaJet Turbo X32" oninput="upd('modelo',this.value)"></div>
-
+ 
     <div class="sec">Cabeça de impressão</div>
     <div class="field"><label>Modelo da cabeça</label>
       <input value="${(d.cabeca||'').replace(/"/g,'&quot;')}" placeholder="ex: i3200, i1600" oninput="upd('cabeca',this.value)"></div>
@@ -323,30 +323,30 @@ function renderFicha(){
       <input type="number" inputmode="numeric" value="${d.ncab||''}" placeholder="2" oninput="upd('ncab',this.value)"></div>
     <div class="field"><label>Preço de 1 cabeça de reposição <span class="hint">R$</span></label>
       <input type="number" inputmode="decimal" value="${d.precabeca||''}" placeholder="4500" oninput="upd('precabeca',this.value)"></div>
-
+ 
     <div class="sec">Produtividade</div>
     <div class="field"><label>Capacidade <span class="hint">m²/h (4 passes)</span></label>
       <input type="number" inputmode="decimal" value="${d.cap||''}" placeholder="44" oninput="upd('cap',this.value)"></div>
-
+ 
     <div class="sec">Custo de impressão (o que mais importa)</div>
     <div class="field"><label>Preço da tinta <span class="hint">R$/litro</span></label>
       <input type="number" inputmode="decimal" value="${d.tinta||''}" placeholder="180" oninput="upd('tinta',this.value)"></div>
     <div class="field"><label>Rendimento <span class="hint">m²/litro</span></label>
       <input type="number" inputmode="decimal" value="${d.rend||''}" placeholder="120" oninput="upd('rend',this.value)"></div>
     <div class="field"><label>Aceita tinta genérica sem perder garantia?</label>${seg('generica')}</div>
-
+ 
     <div class="sec">Máquina e suporte</div>
     <div class="field"><label>Preço TOTAL da máquina <span class="hint">R$ (com frete + instalação)</span></label>
       <input type="number" inputmode="decimal" value="${d.preco||''}" placeholder="89900" oninput="upd('preco',this.value)"></div>
     <div class="field"><label>Suporte <span class="hint">nota de 1 a 5</span></label>
       <input type="number" inputmode="numeric" min="1" max="5" value="${d.suporte||''}" placeholder="4" oninput="upd('suporte',this.value)"></div>
-
+ 
     <div class="sec">Anotações</div>
     <div class="field"><label>Pontos fortes</label>
       <textarea placeholder="o que te agradou…" oninput="upd('fortes',this.value)">${d.fortes||''}</textarea></div>
     <div class="field"><label>Pontos fracos</label>
       <textarea placeholder="o que te preocupou…" oninput="upd('fracos',this.value)">${d.fracos||''}</textarea></div>
-
+ 
     <div class="delrow"><button onclick="delMachine()">Excluir esta máquina</button></div>
   `;
   updateLive();
@@ -364,7 +364,7 @@ function updateLive(){
     g('live-score').style.color=scoreColor(s===undefined?null:s)}
 }
 function delMachine(){if(confirm('Excluir esta máquina?')){data.splice(current,1);save();goList()}}
-
+ 
 /* ---------------- benchmarks ---------------- */
 const REF=[
  {n:"Prime 320X (Teknova)",h:"i3200 ×2",cap:"44 m²/h",tinta:"R$420/L orig",custo:"R$3,23/m²",preco:"R$136k c/ frete",st:"Proposta recebida — cara",dead:false},
@@ -377,7 +377,7 @@ const refdlg=document.getElementById('refdlg');
 document.getElementById('refbody').innerHTML=REF.map(r=>`<div class="refrow ${r.dead?'dead':''}">
   <b>${r.n}</b><div class="meta">${r.h} • ${r.cap} • tinta ${r.tinta} • custo ${r.custo}<br>${r.preco} — ${r.st}</div></div>`).join('');
 function openRef(){refdlg.showModal()}
-
+ 
 /* ---------------- roteiro ---------------- */
 const ROTEIRO=[
  {g:"🎯 PRIORIDADE 1 — PLOTTER 3,2m",items:[
@@ -466,10 +466,11 @@ function renderRoteiro(){
 function toggleR(st,n){const k=rkey(st,n);
   localStorage.setItem(k,localStorage.getItem(k)==='1'?'0':'1');renderRoteiro()}
 function openRoteiro(){renderRoteiro();rotdlg.showModal()}
-
+ 
 /* ---------------- init ---------------- */
 renderList();
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
 </script>
 </body>
 </html>
+ 
